@@ -9,27 +9,40 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import web.campaign.dao.CampaignDao;
-import web.campaign.dao.impl.CampaignDaoImpl;
+import com.google.gson.Gson;
+
+import web.campaign.service.CampaignService;
+import web.campaign.service.impl.CampaignServiceImpl;
+
+
+
 
 
 @WebServlet("/campaign")
 public class GetCampaignController extends HttpServlet {
-
 	private static final long serialVersionUID = 1L;
+	private CampaignService campaignService;
 	
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		System.out.println("campaign");
-		
+	public void init() throws ServletException {
 		try {
-			CampaignDao campaignDao = new CampaignDaoImpl();
-		
-			System.out.println(campaignDao.insert());
+			campaignService = new CampaignServiceImpl();
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		Gson gson = new Gson();
+		
+		var keyword = req.getParameter("k");
+		
+		var campaigns = campaignService.getCampaign(keyword);
+		resp.setContentType("application/json");
+		resp.getWriter().write(gson.toJson(campaigns));
+
 	}
 
 }
