@@ -40,8 +40,11 @@ public class GetCampaignController extends HttpServlet {
 		var keyword = req.getParameter("k");
 		
 		var campaigns = campaignService.getCampaign(keyword);
+		
+		resp.setHeader("Access-Control-Allow-Origin", "*");
 		resp.setContentType("application/json");
 		resp.getWriter().write(gson.toJson(campaigns));
+		// TODO resp 格式要改
 
 	}
 
