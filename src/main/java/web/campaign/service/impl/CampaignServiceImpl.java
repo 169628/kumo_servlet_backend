@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.naming.NamingException;
 
-import web.campaign.bean.Campaign;
+import web.campaign.vo.Campaign;
 import web.campaign.dao.CampaignDao;
 import web.campaign.dao.impl.CampaignDaoImpl;
 import web.campaign.service.CampaignService;
@@ -17,9 +17,9 @@ public class CampaignServiceImpl implements CampaignService{
 	}
 
 	@Override
-	public List<Campaign> getCampaign(String keyword) {
+	public List<Campaign> getCampaign() {
 		
-		return campaignDao.selectAllWithLike(keyword);
+		return campaignDao.selectAll();
 		
 	}
 

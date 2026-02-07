@@ -37,14 +37,12 @@ public class GetCampaignController extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Gson gson = new Gson();
 		
-		var keyword = req.getParameter("k");
-		
-		var campaigns = campaignService.getCampaign(keyword);
+		var campaigns = campaignService.getCampaign();
 		
 		resp.setHeader("Access-Control-Allow-Origin", "*");
 		resp.setContentType("application/json");
 		resp.getWriter().write(gson.toJson(campaigns));
-		// TODO resp 格式要改
+		// TODO change the response format
 
 	}
 

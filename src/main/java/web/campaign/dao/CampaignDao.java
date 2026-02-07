@@ -2,9 +2,9 @@ package web.campaign.dao;
 
 import java.util.List;
 
-import web.campaign.bean.Campaign;
+import web.campaign.vo.Campaign;
 
 public interface CampaignDao {
 
-	List<Campaign> selectAllWithLike(String keyword);
+	List<Campaign> selectAll();
 }

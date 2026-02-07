@@ -1,4 +1,4 @@
-package web.campaign.bean;
+package web.campaign.vo;
 
 import java.sql.Timestamp;
 
@@ -17,6 +17,7 @@ public class Campaign {
 	private Boolean isEnabled;
 	private Timestamp createAt;
 	private Timestamp updateAt;
+	private Boolean isDeleted;
 
 	public Integer getNo() {
 		return no;
@@ -128,6 +129,14 @@ public class Campaign {
 
 	public void setUpdateAt(Timestamp updateAt) {
 		this.updateAt = updateAt;
+	}
+
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
 	}
 
 }

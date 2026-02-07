@@ -12,7 +12,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import web.campaign.bean.Campaign;
+import web.campaign.vo.Campaign;
 import web.campaign.dao.CampaignDao;
 
 
@@ -24,33 +24,21 @@ public class CampaignDaoImpl implements CampaignDao {
 	}
 
 	@Override
-	public List<Campaign> selectAllWithLike(String keyword) {
-		StringBuilder sql = new StringBuilder("select");
-		sql.append(" no, campaign_id, brand, model, sv, tv, file, file_size, is_test_mode, test_list, d.content as download_by, is_enabled, create_at, update_at");
-		sql.append(" from campaigns c");
-		sql.append(" join download_by_ref d");
-		sql.append(" on c.download_by_id = d.download_by_id");
-		sql.append(" where is_deleted = 0");
-		
-		if(keyword != null && !keyword.isEmpty()) {
-			sql.append(" and");
-			sql.append(" ( brand like ? or model like ? or no like ? )");
-		}
-		
-		sql.append(" order by update_at desc, no desc");
+	public List<Campaign> selectAll() {
+		StringBuilder sql = new StringBuilder("SELECT");
+		sql.append(" no, campaign_id, brand, model, sv, tv, file, file_size, is_test_mode, test_list, d.content as download_by, is_enabled, create_at, update_at, is_deleted");
+		sql.append(" FROM campaigns c");
+		sql.append(" JOIN download_by_ref d");
+		sql.append(" ON c.download_by_id = d.download_by_id");
+		sql.append(" WHERE is_deleted = 0");
+		sql.append(" ORDER BY update_at DESC, no DESC");
 	
 		try(
 				Connection conn = ds.getConnection();				
 				PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+				ResultSet rs = pstmt.executeQuery()
 			) {
 			
-			if(keyword != null && !keyword.isEmpty()) {
-				pstmt.setString(1,"%" + keyword + "%");
-				pstmt.setString(2,"%" + keyword + "%");
-				pstmt.setString(3,"%" + keyword + "%");
-			}
-			
-			try (ResultSet rs = pstmt.executeQuery()) {
 				List<Campaign> list = new ArrayList<>();
 				while (rs.next()) {
 					Campaign campaign = new Campaign();
@@ -68,12 +56,13 @@ public class CampaignDaoImpl implements CampaignDao {
 					campaign.setIsEnabled(rs.getBoolean("is_enabled"));
 					campaign.setCreateAt(rs.getTimestamp("create_at"));
 					campaign.setUpdateAt(rs.getTimestamp("update_at"));
+					campaign.setIsDeleted(rs.getBoolean("is_deleted"));
 
 					list.add(campaign);
 				}
+				
 				return list;
-			}
-
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
